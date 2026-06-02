@@ -35,7 +35,7 @@ def train_phobert(method="lora", epochs=5, batch_size=16, lr=2e-5):
     print("=" * 60)
     
     if not all(os.path.exists(p) for p in [train_path, val_path, test_path]):
-        print("❌ Error: Cleaned data files not found. Please run preprocessing first!")
+        print("Error: Cleaned data files not found. Please run preprocessing first!")
         return
 
     # 1. Load data
@@ -90,7 +90,7 @@ def train_phobert(method="lora", epochs=5, batch_size=16, lr=2e-5):
             if lr == 2e-5:
                 lr = 2e-4
         except ImportError:
-            print("❌ Error: 'peft' library is not installed. Defaulting to Full Fine-Tuning.")
+            print("Error: 'peft' library is not installed. Defaulting to Full Fine-Tuning.")
             method = "full"
             
     # 5. Training Arguments
@@ -122,7 +122,7 @@ def train_phobert(method="lora", epochs=5, batch_size=16, lr=2e-5):
     print(f"⌛ Starting training for {epochs} epochs with LR={lr}...")
     trainer.train()
     
-    print(f"✅ Training completed! Saving best model to {final_model_dir}...")
+    print(f"Training completed! Saving best model to {final_model_dir}...")
     trainer.save_model(final_model_dir)
     tokenizer.save_pretrained(final_model_dir)
     

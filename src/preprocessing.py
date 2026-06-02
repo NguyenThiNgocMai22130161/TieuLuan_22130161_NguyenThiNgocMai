@@ -93,7 +93,7 @@ def preprocess_files():
         
         print(f"⌛ Processing file: {file_name}...")
         if not os.path.exists(input_path):
-            print(f"❌ Error: File not found at {input_path}")
+            print(f"Error: File not found at {input_path}")
             continue
             
         try:
@@ -110,10 +110,10 @@ def preprocess_files():
             
             # Save preprocessed dataset
             df.to_csv(output_path, index=False, encoding='utf-8-sig')
-            print(f"✅ Success! Cleaned dataset saved to {output_path} ({raw_len} samples)")
+            print(f"Success! Cleaned dataset saved to {output_path} ({raw_len} samples)")
             
         except Exception as e:
-            print(f"❌ Error occurred while processing {file_name}: {e}")
+            print(f"Error occurred while processing {file_name}: {e}")
             
     print("=" * 60)
     print("Preprocessing completed!")

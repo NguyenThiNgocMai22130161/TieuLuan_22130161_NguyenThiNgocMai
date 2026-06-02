@@ -96,7 +96,7 @@ def train_lstm():
     print(f"Device: {device}")
     
     if not all(os.path.exists(p) for p in [train_path, val_path, test_path]):
-        print("❌ Error: Cleaned data files not found. Please run preprocessing first!")
+        print("Error: Cleaned data files not found. Please run preprocessing first!")
         return
 
     # 1. Load preprocessed datasets
@@ -125,12 +125,12 @@ def train_lstm():
     vocab['<UNK>'] = 1
     
     vocab_size = len(vocab)
-    print(f"✅ Vocabulary size: {vocab_size}")
+    print(f"Vocabulary size: {vocab_size}")
     
     vocab_path = os.path.join(PKL_DIR, "lstm_vocab.json")
     with open(vocab_path, "w", encoding="utf-8") as f:
         json.dump(vocab, f, ensure_ascii=False, indent=4)
-    print(f"✅ Saved vocabulary to {vocab_path}")
+    print(f"Saved vocabulary to {vocab_path}")
     
     # 3. Create sequence matrices
     X_train_seq = np.array([text_to_sequence(t, vocab) for t in X_train_raw])
@@ -151,7 +151,7 @@ def train_lstm():
     print("⌛ Computing class weights...")
     class_weights = compute_class_weight('balanced', classes=np.unique(y_train_raw), y=y_train_raw)
     class_weights_tensor = torch.tensor(class_weights, dtype=torch.float).to(device)
-    print(f"✅ Class weights: {class_weights} (Neutral penalized more)")
+    print(f"Class weights: {class_weights} (Neutral penalized more)")
     
     # 5. Initialize Model, Loss and Optimizer
     model = BiLSTMClassifier(vocab_size=vocab_size).to(device)

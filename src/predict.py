@@ -16,7 +16,7 @@ PKL_DIR = os.path.join(PROJECT_ROOT, "pkl")
 
 # Label mappings
 labels_map = {0: "Tiêu cực (Negative)", 1: "Trung tính (Neutral)", 2: "Tích cực (Positive)"}
-emoji_map = {0: "😞", 1: "😐", 2: "😊"}
+emoji_map = {0: "", 1: "", 2: ""}
 
 def predict_sentiment(text, model_type="svm"):
     """
@@ -36,7 +36,7 @@ def predict_sentiment(text, model_type="svm"):
         model_path = os.path.join(PKL_DIR, model_file)
         
         if not os.path.exists(tfidf_path) or not os.path.exists(model_path):
-            return f"❌ Error: Model or vectorizer files not found in {PKL_DIR}. Please train baselines first!", 0.0
+            return f"Error: Model or vectorizer files not found in {PKL_DIR}. Please train baselines first!", 0.0
             
         vectorizer = joblib.load(tfidf_path)
         model = joblib.load(model_path)
@@ -66,7 +66,7 @@ def predict_sentiment(text, model_type="svm"):
         lstm_weights_path = os.path.join(PKL_DIR, "best_lstm_model_correct.pth")
         
         if not os.path.exists(vocab_path) or not os.path.exists(lstm_weights_path):
-            return f"❌ Error: LSTM weights or vocabulary files not found in {PKL_DIR}. Please train Bi-LSTM first!", 0.0
+            return f"Error: LSTM weights or vocabulary files not found in {PKL_DIR}. Please train Bi-LSTM first!", 0.0
             
         with open(vocab_path, "r", encoding="utf-8") as f:
             vocab = json.load(f)
@@ -101,7 +101,7 @@ def interactive_loop(model_type):
     
     while True:
         try:
-            user_input = input("\n📝 Nhập câu phản hồi của bạn: ").strip()
+            user_input = input("\nNhập câu phản hồi của bạn: ").strip()
             if not user_input:
                 continue
             if user_input.lower() in ["exit", "quit"]:
@@ -117,13 +117,13 @@ def interactive_loop(model_type):
             label_text = labels_map[pred_class]
             emoji = emoji_map[pred_class]
             
-            print(f"🔍 Kết quả phân tích: {emoji}  {label_text} (Độ tin cậy: {conf*100:.2f}%)")
+            print(f"Kết quả phân tích: {label_text} (Độ tin cậy: {conf*100:.2f}%)")
             
         except KeyboardInterrupt:
             print("\nTạm biệt!")
             break
         except Exception as e:
-            print(f"❌ Đã xảy ra lỗi: {e}")
+            print(f"Đã xảy ra lỗi: {e}")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Predict sentiment of Vietnamese student feedbacks.")
@@ -140,6 +140,6 @@ if __name__ == "__main__":
             label_text = labels_map[pred_class]
             emoji = emoji_map[pred_class]
             print(f"Câu: \"{args.text}\"")
-            print(f"Kết quả: {emoji}  {label_text} (Độ tin cậy: {conf*100:.2f}%)")
+            print(f"Kết quả: {label_text} (Độ tin cậy: {conf*100:.2f}%)")
     else:
         interactive_loop(args.model)

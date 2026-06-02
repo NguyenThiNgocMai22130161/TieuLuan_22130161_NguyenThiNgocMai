@@ -26,7 +26,7 @@ def train_baselines():
     print("=" * 60)
     
     if not os.path.exists(train_path) or not os.path.exists(test_path):
-        print("❌ Error: Cleaned train or test files not found. Please run preprocessing first!")
+        print("Error: Cleaned train or test files not found. Please run preprocessing first!")
         return
 
     # 1. Load preprocessed datasets
@@ -46,7 +46,7 @@ def train_baselines():
     # Save Vectorizer
     vectorizer_path = os.path.join(PKL_DIR, "tfidf_vectorizer.pkl")
     joblib.dump(vectorizer, vectorizer_path)
-    print(f"✅ Saved TfidfVectorizer to {vectorizer_path}")
+    print(f"Saved TfidfVectorizer to {vectorizer_path}")
     
     # 3. Multinomial Naive Bayes
     print("⌛ Training Multinomial Naive Bayes...")
@@ -58,7 +58,7 @@ def train_baselines():
     
     nb_model_path = os.path.join(PKL_DIR, "naive_bayes_model.pkl")
     joblib.dump(nb_model, nb_model_path)
-    print(f"✅ Saved Naive Bayes to {nb_model_path}")
+    print(f"Saved Naive Bayes to {nb_model_path}")
     
     # 4. Support Vector Machine (LinearSVC)
     print("⌛ Training Linear Support Vector Machine...")
@@ -70,7 +70,7 @@ def train_baselines():
     
     svm_model_path = os.path.join(PKL_DIR, "svm_best_model.pkl")
     joblib.dump(svm_model, svm_model_path)
-    print(f"✅ Saved SVM to {svm_model_path}")
+    print(f"Saved SVM to {svm_model_path}")
     
     # 5. Display Evaluation Results
     target_labels = ['Tiêu cực (0)', 'Trung tính (1)', 'Tích cực (2)']
