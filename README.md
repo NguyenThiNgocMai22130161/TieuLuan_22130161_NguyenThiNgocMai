@@ -46,10 +46,14 @@ code/
 │   └── best_lstm_model_correct.pth
 │
 ├── notebooks/                   # Jupyter Notebook — chạy theo thứ tự từ 00 đến 03
-│   ├── 00_Tien_Xu_Ly.ipynb      # Tiền xử lý dữ liệu tiếng Việt
-│   ├── 01_Baseline_NB_SVM.ipynb # Mô hình TF-IDF + Naive Bayes & SVM
-│   ├── 02_BiLSTM.ipynb          # Mô hình học sâu Bidirectional LSTM
-│   └── 03_PhoBERT.ipynb         # Fine-tuning PhoBERT & So sánh tổng thể
+│   ├── 00_Tien_Xu_Ly.ipynb      # Tiền xử lý dữ liệu (chạy Local)
+│   ├── 00_Tien_Xu_Ly_Colab.ipynb# Tiền xử lý dữ liệu (chạy Google Colab)
+│   ├── 01_Baseline_NB_SVM.ipynb # Mô hình NB & SVM (chạy Local)
+│   ├── 01_Baseline_NB_SVM_Colab.ipynb # Mô hình NB & SVM (chạy Google Colab)
+│   ├── 02_BiLSTM.ipynb          # Mô hình Bi-LSTM (chạy Local)
+│   ├── 02_BiLSTM_Colab.ipynb    # Mô hình Bi-LSTM (chạy Google Colab)
+│   ├── 03_PhoBERT.ipynb         # Fine-tuning PhoBERT (chạy Local)
+│   └── 03_PhoBERT_Colab.ipynb   # Fine-tuning PhoBERT (chạy Google Colab)
 │
 ├── src/                         # Script Python độc lập (chạy bằng dòng lệnh)
 │   ├── preprocessing.py         # Tiền xử lý & tách từ tiếng Việt
@@ -63,6 +67,7 @@ code/
 ├── .gitignore
 └── README.md
 ```
+
 
 ## Hướng dẫn cài đặt
 
@@ -145,3 +150,33 @@ Tinh chỉnh mô hình ngôn ngữ PhoBERT-base:
 | Mô hình ngôn ngữ | `transformers` (Hugging Face), `PhoBERT-base` |
 | Tinh chỉnh hiệu quả | `peft` (LoRA, dùng thêm trong `train_phobert.py`) |
 | Trực quan hóa | `matplotlib`, `seaborn` |
+
+## Hướng dẫn chạy trên Google Colab
+
+Để thực hiện chạy thực nghiệm đồ án trên Google Colab kết hợp lưu trữ kết quả trên Google Drive, làm theo các bước sau:
+
+### Bước 1: Chuẩn bị cấu trúc thư mục trên Google Drive
+Truy cập [Google Drive](https://drive.google.com), tạo một thư mục tại root tên là `TieuLuan_22130161` (đường dẫn Drive tương ứng sẽ là `MyDrive/TieuLuan_22130161/`). Cấu trúc thư mục con cần thiết lập như sau:
+```text
+MyDrive/
+└── TieuLuan_22130161/
+    ├── data/          ← Tải lên 4 file dữ liệu: train.csv, validation.csv, test.csv và teencode.txt từ code/data
+    ├── fn/            ← Để trống (môi trường sẽ tự động ghi cleaned data tại đây)
+    ├── pkl/           ← Để trống (môi trường sẽ tự động lưu mô hình và vocab tại đây)
+    └── image/         ← Để trống (môi trường sẽ tự động lưu các hình ảnh biểu đồ và ma trận nhầm lẫn tại đây)
+```
+
+### Bước 2: Tải các file notebook lên Google Colab
+1. Mở [Google Colab](https://colab.research.google.com).
+2. Chọn **File → Upload notebook** và tải lên 4 tệp notebook có hậu tố `_Colab.ipynb` từ thư mục `code/notebooks/`.
+3. Lưu bản sao vào Drive của bạn (**File → Save a copy in Drive**).
+
+### Bước 3: Chạy lần lượt các notebook thực nghiệm
+Chạy các notebook theo đúng thứ tự:
+1. `00_Tien_Xu_Ly_Colab.ipynb`
+2. `01_Baseline_NB_SVM_Colab.ipynb`
+3. `02_BiLSTM_Colab.ipynb`
+4. `03_PhoBERT_Colab.ipynb`
+
+*Lưu ý:* Riêng đối với notebook `03_PhoBERT_Colab.ipynb`, bạn cần thay đổi môi trường chạy sang GPU để huấn luyện PhoBERT nhanh hơn: vào **Runtime → Change runtime type → Hardware accelerator → chọn T4 GPU → click Save**.
+
