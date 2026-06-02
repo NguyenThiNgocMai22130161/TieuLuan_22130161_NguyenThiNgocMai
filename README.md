@@ -1,6 +1,6 @@
 # Đồ án Tốt nghiệp: Nghiên cứu Phương pháp Học sâu cho bài toán Phân tích Cảm xúc tiếng Việt
 
-Dự án thực nghiệm và so sánh toàn diện các phương pháp học máy và học sâu cho bài toán **Phân tích Cảm xúc phản hồi sinh viên (Sentiment Analysis)** tiếng Việt, sử dụng bộ ngữ liệu chuẩn **UIT-VSFC**. Các mô hình được nghiên cứu bao gồm Multinomial Naive Bayes, Support Vector Machine (SVM), Bidirectional LSTM và mô hình ngôn ngữ tiền huấn luyện **PhoBERT** (Full Fine-tuning).
+Dự án thực nghiệm và so sánh toàn diện các phương pháp học máy và học sâu cho bài toán **Phân tích Cảm xúc phản hồi sinh viên (Sentiment Analysis)** tiếng Việt, sử dụng bộ ngữ liệu chuẩn **UIT-VSFC**. Các mô hình được nghiên cứu bao gồm Multinomial Naive Bayes, Support Vector Machine, Bidirectional LSTM và mô hình ngôn ngữ tiền huấn luyện **PhoBERT** (Full Fine-tuning).
 
 ## Thông tin thực hiện
 
@@ -16,11 +16,11 @@ Dự án thực nghiệm và so sánh toàn diện các phương pháp học má
 
 Sử dụng bộ ngữ liệu **UIT-VSFC** (Vietnamese Students' Feedback Corpus) gồm 16.175 câu phản hồi ngắn của sinh viên, được gán nhãn theo 3 lớp cảm xúc:
 
-| Nhãn | Lớp | Số lượng (Train / Val / Test) |
-|---|---|---|
-| 0 | Tiêu cực (Negative) | 8.190 / 1.132 / 1.409 |
-| 1 | Trung tính (Neutral) | 1.180 / 164 / 167 |
-| 2 | Tích cực (Positive) | 2.056 / 287 / 1.590 |
+| Nhãn | Lớp | Train | Validation | Test |
+|---|---|---|---|---|
+| 0 | Tiêu cực (Negative) | 8.190 | 1.132 | 1.409 |
+| 1 | Trung tính (Neutral) | 1.180 | 164 | 167 |
+| 2 | Tích cực (Positive) | 2.056 | 287 | 1.590 |
 
 ## Cấu trúc thư mục
 
@@ -51,15 +51,15 @@ code/
 │   ├── 02_BiLSTM.ipynb          # Mô hình học sâu Bidirectional LSTM
 │   └── 03_PhoBERT.ipynb         # Fine-tuning PhoBERT & So sánh tổng thể
 │
-├── src/                         # Script Python độc lập (có thể chạy bằng dòng lệnh)
-│   ├── preprocessing.py
-│   ├── baselines.py
-│   ├── lstm.py
-│   ├── train_phobert.py
-│   ├── generate_plots.py
-│   └── predict.py
+├── src/                         # Script Python độc lập (chạy bằng dòng lệnh)
+│   ├── preprocessing.py         # Tiền xử lý & tách từ tiếng Việt
+│   ├── baselines.py             # Huấn luyện NB & SVM
+│   ├── lstm.py                  # Huấn luyện Bi-LSTM
+│   ├── train_phobert.py         # Fine-tuning PhoBERT
+│   ├── generate_plots.py        # Sinh biểu đồ & ma trận nhầm lẫn
+│   └── predict.py               # Dự đoán cảm xúc cho câu mới
 │
-├── image/                       # Biểu đồ kết quả (tạo ra khi chạy notebook 01–03)
+├── image/                       # Biểu đồ kết quả (tạo ra khi chạy notebook)
 ├── .gitignore
 └── README.md
 ```
@@ -73,7 +73,7 @@ python3 -m venv env_doan
 source env_doan/bin/activate
 ```
 
-### Bước 2: Cài đặt các thư viện
+### Bước 2: Cài đặt thư viện
 
 ```bash
 pip install --upgrade pip
@@ -83,46 +83,47 @@ pip install pandas numpy scikit-learn underthesea torch transformers \
 
 ## Hướng dẫn chạy Notebooks
 
-Mở Jupyter Lab hoặc Jupyter Notebook, sau đó chạy lần lượt theo thứ tự:
+Mở Jupyter và chạy lần lượt theo thứ tự từ 00 đến 03.
 
-### Notebook 00 — Tiền xử lý dữ liệu (`00_Tien_Xu_Ly.ipynb`)
+### 00 — Tiền xử lý dữ liệu (`00_Tien_Xu_Ly.ipynb`)
 
-Thực hiện các bước làm sạch và chuẩn hóa văn bản:
+Làm sạch và chuẩn hóa toàn bộ bộ dữ liệu UIT-VSFC:
 - Chuẩn hóa Unicode (NFC), chuyển về chữ thường
-- Xóa ký tự lặp lại kéo dài (ví dụ: `dạaaaaa` → `dạa`)
+- Xóa ký tự lặp kéo dài (ví dụ: `dạaaaaa` → `dạa`)
 - Ánh xạ teencode và từ viết tắt qua từ điển 478 quy tắc
 - Loại bỏ dấu câu và ký hiệu đặc biệt
 - Tách từ tiếng Việt bằng thư viện `underthesea`
 
-Kết quả được lưu ra thư mục `fn/`.
+Kết quả lưu vào thư mục `fn/`.
 
-### Notebook 01 — Mô hình Baseline (`01_Baseline_NB_SVM.ipynb`)
+### 01 — Mô hình Baseline (`01_Baseline_NB_SVM.ipynb`)
 
-Xây dựng các mô hình học máy truyền thống:
-- Trích xuất đặc trưng TF-IDF (max 5000 từ, ngram 1–2)
+Xây dựng mô hình học máy truyền thống làm đường cơ sở (baseline):
+- Trích xuất đặc trưng TF-IDF (max 5.000 từ, ngram 1–2)
 - Huấn luyện Multinomial Naive Bayes
-- Huấn luyện Linear SVM (LinearSVC)
+- Huấn luyện Linear SVM (LinearSVC, C=0.1)
 - Đánh giá Accuracy, Precision, Recall, F1-Score trên tập Test
-- Lưu mô hình ra thư mục `pkl/`
+- Lưu mô hình vào thư mục `pkl/`
 
-### Notebook 02 — Mô hình Bi-LSTM (`02_BiLSTM.ipynb`)
+### 02 — Mô hình Bi-LSTM (`02_BiLSTM.ipynb`)
 
 Xây dựng và huấn luyện mạng Bidirectional LSTM:
-- Xây dựng từ điển từ vựng từ tập Train
+- Xây dựng từ điển từ vựng từ tập Train (lọc từ xuất hiện ≥ 2 lần)
 - Mã hóa văn bản thành chuỗi token ID, padding về độ dài 100
-- Kiến trúc: Embedding → Spatial Dropout → Bi-LSTM → Global Average Pooling → FC
-- Áp dụng **Class Weights** để xử lý mất cân bằng dữ liệu
-- Huấn luyện với cơ chế **Early Stopping**
+- Kiến trúc: Embedding → Spatial Dropout → Bi-LSTM → Global Avg Pooling → FC
+- Áp dụng **Class Weights** để xử lý mất cân bằng nhãn
+- Huấn luyện với cơ chế **Early Stopping** (patience=3)
+- Lưu trọng số tốt nhất vào `pkl/best_lstm_model_correct.pth`
 
-### Notebook 03 — Fine-tuning PhoBERT (`03_PhoBERT.ipynb`)
+### 03 — Fine-tuning PhoBERT (`03_PhoBERT.ipynb`)
 
 Tinh chỉnh mô hình ngôn ngữ PhoBERT-base:
 - Tokenization bằng PhoBERT-base Tokenizer (max_length=256)
-- **Full Fine-tuning** toàn bộ 135 triệu tham số
-- Sử dụng `transformers.Trainer` với cơ chế lưu checkpoint tốt nhất
+- **Full Fine-tuning** toàn bộ 135 triệu tham số (learning_rate=2e-5)
+- Huấn luyện 5 epoch với `transformers.Trainer`, lưu checkpoint tốt nhất theo F1
 - Đánh giá kết quả và so sánh tổng thể 4 mô hình
 
-> **Lưu ý:** Bước huấn luyện PhoBERT yêu cầu GPU có tối thiểu 8 GB VRAM. Khuyến nghị sử dụng Google Colab (T4 GPU).
+> **Lưu ý:** Bước huấn luyện PhoBERT yêu cầu GPU tối thiểu 8 GB VRAM. Khuyến nghị sử dụng Google Colab (T4 GPU, ~15–20 phút).
 
 ## Kết quả thực nghiệm
 
@@ -142,5 +143,5 @@ Tinh chỉnh mô hình ngôn ngữ PhoBERT-base:
 | Học máy truyền thống | `scikit-learn` |
 | Học sâu | `PyTorch` |
 | Mô hình ngôn ngữ | `transformers` (Hugging Face), `PhoBERT-base` |
-| Tinh chỉnh hiệu quả | `peft` (LoRA) |
+| Tinh chỉnh hiệu quả | `peft` (LoRA, dùng thêm trong `train_phobert.py`) |
 | Trực quan hóa | `matplotlib`, `seaborn` |
