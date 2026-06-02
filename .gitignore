@@ -1,0 +1,52 @@
+# Dữ liệu gốc và dữ liệu đã xử lý (nặng, không đẩy lên GitHub)
+data/
+fn/
+
+# Mô hình đã huấn luyện (nặng, không đẩy lên GitHub)
+pkl/
+
+# Ảnh kết quả (tự sinh lại khi chạy notebook)
+image/
+
+# OS system files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# Python cache and compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+.venv/
+env/
+venv/
+ENV/
+env_doan/
+
+# Heavy model checkpoints and final outputs for transformers (to prevent uploading GBs of weights)
+phobert_*_checkpoints/
+phobert_*_final/
+
+# Logs
+*.log
